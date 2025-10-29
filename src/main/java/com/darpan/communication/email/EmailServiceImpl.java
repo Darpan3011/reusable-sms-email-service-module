@@ -1,0 +1,113 @@
+package com.darpan.communication.email;
+
+import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+@Service
+@Slf4j
+public class EmailServiceImpl implements EmailService {
+
+    private final JavaMailSender mailSender;
+
+    public EmailServiceImpl(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    /**
+     * Core reusable method for sending dynamic emails with optional attachments.
+     */
+    @Override
+    public void sendEmail(String to, String subject, String body, String from, List<Resource> attachments) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(body, true); // HTML enabled
+
+            if (attachments != null && !attachments.isEmpty()) {
+                for (Resource attachment : attachments) {
+                    helper.addAttachment(attachment.getFilename(), attachment);
+                }
+            }
+
+            mailSender.send(message);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send email: " + e.getMessage(), e);
+        }
+    }
+
+    // ----------------------------
+    // Helper Methods for Attachments
+    // ----------------------------
+
+    public void sendEmailWithClasspathFiles(String to, String subject, String body, List<String> classpathFiles) {
+        if (classpathFiles == null || classpathFiles.isEmpty()) {
+            throw new IllegalArgumentException("No classpath files provided!");
+        }
+        List<Resource> resources = classpathFiles.stream().map(ClassPathResource::new).map(r -> (Resource) r).toList();
+        sendEmail(to, subject, body, null, resources);
+    }
+
+    public void sendEmailWithInputStream(String to, String subject, String body, ByteArrayInputStream stream, String fileName) {
+        Resource resource = new ByteArrayResource(toByteArray(stream)) {
+            @Override
+            public String getFilename() {
+                return fileName;
+            }
+        };
+        sendEmail(to, subject, body, null, List.of(resource));
+    }
+
+    public void sendEmailWithMultipartFile(String to, String subject, String body, MultipartFile multipartFile) {
+        Resource resource = new ByteArrayResource(toByteArray(multipartFile)) {
+            @Override
+            public String getFilename() {
+                return multipartFile.getOriginalFilename();
+            }
+        };
+        sendEmail(to, subject, body, null, List.of(resource));
+    }
+
+    public void sendEmailWithMultipleFiles(String to, String subject, String body, List<String> files) {
+        List<Resource> resources = files.stream().map(FileSystemResource::new).map(r -> (Resource) r).toList();
+        sendEmail(to, subject, body, null, resources);
+    }
+
+    // ----------------------------
+    // Utility Converters
+    // ----------------------------
+    private byte[] toByteArray(MultipartFile file) {
+        try {
+            return file.getBytes();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read MultipartFile: " + e.getMessage(), e);
+        }
+    }
+
+    private byte[] toByteArray(InputStream inputStream) {
+        try {
+            return inputStream.readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read InputStream: " + e.getMessage(), e);
+        }
+    }
+}
+
+
