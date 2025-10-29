@@ -13,9 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -68,16 +66,16 @@ public class EmailServiceImpl implements EmailService {
         List<Resource> resources = classpathFiles.stream().map(ClassPathResource::new).map(r -> (Resource) r).toList();
         sendEmailAsync(to, subject, body, null, resources);
     }
-
-    public void sendEmailWithInputStream(String to, String subject, String body, ByteArrayInputStream stream, String fileName) {
-        Resource resource = new ByteArrayResource(toByteArray(stream)) {
-            @Override
-            public String getFilename() {
-                return fileName;
-            }
-        };
-        sendEmailAsync(to, subject, body, null, List.of(resource));
-    }
+//
+//    public void sendEmailWithInputStream(String to, String subject, String body, ByteArrayInputStream stream, String fileName) {
+//        Resource resource = new ByteArrayResource(toByteArray(stream)) {
+//            @Override
+//            public String getFilename() {
+//                return fileName;
+//            }
+//        };
+//        sendEmailAsync(to, subject, body, null, List.of(resource));
+//    }
 
     public void sendEmailWithMultipartFile(String to, String subject, String body, MultipartFile multipartFile) {
         Resource resource = new ByteArrayResource(toByteArray(multipartFile)) {
@@ -109,14 +107,14 @@ public class EmailServiceImpl implements EmailService {
             throw new RuntimeException("Failed to read MultipartFile: " + e.getMessage(), e);
         }
     }
-
-    private byte[] toByteArray(InputStream inputStream) {
-        try {
-            return inputStream.readAllBytes();
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read InputStream: " + e.getMessage(), e);
-        }
-    }
+//
+//    private byte[] toByteArray(InputStream inputStream) {
+//        try {
+//            return inputStream.readAllBytes();
+//        } catch (IOException e) {
+//            throw new RuntimeException("Failed to read InputStream: " + e.getMessage(), e);
+//        }
+//    }
 }
 
 

@@ -7,8 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sns.SnsClient;
+
+import java.time.Duration;
 
 @Configuration
 public class MessagingAutoConfiguration {
@@ -27,6 +30,11 @@ public class MessagingAutoConfiguration {
         return SnsClient.builder()
                 .region(Region.of(awsSnsConfig.getRegion()))
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
+                .httpClientBuilder(ApacheHttpClient.builder()
+                        .connectionTimeout(Duration.ofSeconds(5))
+                        .socketTimeout(Duration.ofSeconds(30))
+                        .maxConnections(50)
+                        .connectionAcquisitionTimeout(Duration.ofSeconds(10)))
                 .build();
     }
 
@@ -42,6 +50,8 @@ public class MessagingAutoConfiguration {
         cfg.setPassword(creds.getPassword());
         cfg.setSystemType(smppConfig.getDefaultConfig().getSystemType());
         cfg.setReconnectDelay(smppConfig.getDefaultConfig().getRebindTime());
+        cfg.setMaxReconnect(5);
+        cfg.setReconnectDelay(5000);
 
         return cfg;
     }

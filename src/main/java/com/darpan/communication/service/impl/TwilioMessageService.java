@@ -3,9 +3,7 @@ package com.darpan.communication.service.impl;
 import com.darpan.communication.model.SmsRequest;
 import com.darpan.communication.model.SmsResponse;
 import com.darpan.communication.service.MessageService;
-import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -26,11 +24,6 @@ public class TwilioMessageService implements MessageService {
 
     @Value("${messaging.twilio.token}")
     private String authToken;
-
-    @PostConstruct
-    public void init() {
-        Twilio.init(accountSid, authToken);
-    }
 
     @Override
     public SmsResponse sendMessage(SmsRequest request) {

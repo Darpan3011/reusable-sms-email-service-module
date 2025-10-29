@@ -3,7 +3,6 @@ package com.darpan.communication.service;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -13,7 +12,7 @@ public interface EmailService {
 
     void sendEmailWithClasspathFiles(String to, String subject, String body, List<String> classpathFile);
 
-    void sendEmailWithInputStream(String to, String subject, String body, ByteArrayInputStream stream, String fileName);
+//    void sendEmailWithInputStream(String to, String subject, String body, ByteArrayInputStream stream, String fileName);
 
     void sendEmailWithMultipartFile(String to, String subject, String body, MultipartFile multipartFile);
 
