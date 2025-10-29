@@ -1,7 +1,8 @@
-package com.darpan.communication.message.service;
+package com.darpan.communication.service.impl;
 
-import com.darpan.communication.message.model.SmsRequest;
-import com.darpan.communication.message.model.SmsResponse;
+import com.darpan.communication.model.SmsRequest;
+import com.darpan.communication.model.SmsResponse;
+import com.darpan.communication.service.MessageService;
 import com.messagebird.MessageBirdClient;
 import com.messagebird.MessageBirdServiceImpl;
 import com.messagebird.exceptions.GeneralException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -58,5 +60,10 @@ public class MessageBirdService implements MessageService {
             log.error("MessageBird unexpected error: {}", e.getMessage(), e);
             return SmsResponse.builder().success(false).provider("MESSAGEBIRD").error(e.getMessage()).build();
         }
+    }
+
+    @Override
+    public CompletableFuture<SmsResponse> sendMessageAsync(SmsRequest request) {
+        return CompletableFuture.supplyAsync(() -> sendMessage(request));
     }
 }

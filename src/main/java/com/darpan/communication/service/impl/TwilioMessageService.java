@@ -1,7 +1,8 @@
-package com.darpan.communication.message.service;
+package com.darpan.communication.service.impl;
 
-import com.darpan.communication.message.model.SmsRequest;
-import com.darpan.communication.message.model.SmsResponse;
+import com.darpan.communication.model.SmsRequest;
+import com.darpan.communication.model.SmsResponse;
+import com.darpan.communication.service.MessageService;
 import com.twilio.Twilio;
 import com.twilio.rest.api.v2010.account.Message;
 import jakarta.annotation.PostConstruct;
@@ -9,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -52,5 +55,10 @@ public class TwilioMessageService implements MessageService {
                     .error(e.getMessage())
                     .build();
         }
+    }
+
+    @Override
+    public CompletableFuture<SmsResponse> sendMessageAsync(SmsRequest request) {
+        return CompletableFuture.supplyAsync(() -> sendMessage(request));
     }
 }

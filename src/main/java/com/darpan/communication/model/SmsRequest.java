@@ -1,4 +1,4 @@
-package com.darpan.communication.message.model;
+package com.darpan.communication.model;
 
 import lombok.*;
 

@@ -1,5 +1,6 @@
-package com.darpan.communication.email;
+package com.darpan.communication.service.impl;
 
+import com.darpan.communication.service.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
@@ -8,6 +9,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
@@ -30,6 +33,7 @@ public class EmailServiceImpl implements EmailService {
      * Core reusable method for sending dynamic emails with optional attachments.
      */
     @Override
+    @Async
     public void sendEmail(String to, String subject, String body, String from, List<Resource> attachments) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -62,7 +66,7 @@ public class EmailServiceImpl implements EmailService {
             throw new IllegalArgumentException("No classpath files provided!");
         }
         List<Resource> resources = classpathFiles.stream().map(ClassPathResource::new).map(r -> (Resource) r).toList();
-        sendEmail(to, subject, body, null, resources);
+        sendEmailAsync(to, subject, body, null, resources);
     }
 
     public void sendEmailWithInputStream(String to, String subject, String body, ByteArrayInputStream stream, String fileName) {
@@ -72,7 +76,7 @@ public class EmailServiceImpl implements EmailService {
                 return fileName;
             }
         };
-        sendEmail(to, subject, body, null, List.of(resource));
+        sendEmailAsync(to, subject, body, null, List.of(resource));
     }
 
     public void sendEmailWithMultipartFile(String to, String subject, String body, MultipartFile multipartFile) {
@@ -82,12 +86,17 @@ public class EmailServiceImpl implements EmailService {
                 return multipartFile.getOriginalFilename();
             }
         };
-        sendEmail(to, subject, body, null, List.of(resource));
+        sendEmailAsync(to, subject, body, null, List.of(resource));
     }
 
     public void sendEmailWithMultipleFiles(String to, String subject, String body, List<String> files) {
         List<Resource> resources = files.stream().map(FileSystemResource::new).map(r -> (Resource) r).toList();
-        sendEmail(to, subject, body, null, resources);
+        sendEmailAsync(to, subject, body, null, resources);
+    }
+
+    @Override
+    public CompletableFuture<Void> sendEmailAsync(String to, String subject, String body, String from, List<Resource> attachments) {
+        return CompletableFuture.runAsync(() -> sendEmail(to, subject, body, from, attachments));
     }
 
     // ----------------------------

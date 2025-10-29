@@ -1,10 +1,11 @@
-package com.darpan.communication.email;
+package com.darpan.communication.service;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public interface EmailService {
 
@@ -17,5 +18,7 @@ public interface EmailService {
     void sendEmailWithMultipartFile(String to, String subject, String body, MultipartFile multipartFile);
 
     void sendEmailWithMultipleFiles(String to, String subject, String body, List<String> files);
+
+    CompletableFuture<Void> sendEmailAsync(String to, String subject, String body, String from, List<Resource> attachments);
 }
 

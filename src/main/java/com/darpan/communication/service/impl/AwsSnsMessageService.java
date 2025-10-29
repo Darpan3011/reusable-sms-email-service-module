@@ -1,13 +1,16 @@
-package com.darpan.communication.message.service;
+package com.darpan.communication.service.impl;
 
-import com.darpan.communication.message.model.SmsRequest;
-import com.darpan.communication.message.model.SmsResponse;
+import com.darpan.communication.model.SmsRequest;
+import com.darpan.communication.model.SmsResponse;
+import com.darpan.communication.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sns.SnsClient;
 import software.amazon.awssdk.services.sns.model.PublishRequest;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
+
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -44,5 +47,10 @@ public class AwsSnsMessageService implements MessageService {
                     .error(e.getMessage())
                     .build();
         }
+    }
+
+    @Override
+    public CompletableFuture<SmsResponse> sendMessageAsync(SmsRequest request) {
+        return CompletableFuture.supplyAsync(() -> sendMessage(request));
     }
 }
