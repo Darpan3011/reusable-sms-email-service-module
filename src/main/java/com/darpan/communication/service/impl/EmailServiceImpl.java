@@ -31,7 +31,7 @@ public class EmailServiceImpl implements EmailService {
      * Core reusable method for sending dynamic emails with optional attachments.
      */
     @Override
-    @Async
+    @Async("communicationTaskExecutor")
     public void sendEmail(String to, String subject, String body, String from, List<Resource> attachments) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
@@ -93,6 +93,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    @Async("communicationTaskExecutor")
     public CompletableFuture<Void> sendEmailAsync(String to, String subject, String body, String from, List<Resource> attachments) {
         return CompletableFuture.runAsync(() -> sendEmail(to, subject, body, from, attachments));
     }
