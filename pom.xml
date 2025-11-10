@@ -70,13 +70,6 @@
             <version>${twilio.version}</version>
         </dependency>
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/javax.mail/mail &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>javax.mail</groupId>-->
-<!--            <artifactId>mail</artifactId>-->
-<!--            <version>1.4.7</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sns</artifactId>
