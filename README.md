@@ -116,6 +116,9 @@ Implementations:
 - Apache Camel (spring-boot, smpp, bean)
 - Lombok
 - iText 5.5.13.3 (present but not used in services)
+- In parent project add
+  ```java
+  @ComponentScan(basePackages = {"com.darpan.communication"})
 
 ## Troubleshooting
 - Ensure AutoConfiguration imports file is populated or component-scan base package is included
