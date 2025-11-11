@@ -21,17 +21,6 @@ A reusable Spring Boot starter library for Email and SMS with async support and 
 </dependency>
 ```
 
-## Auto-configuration
-This module provides:
-- `com.darpan.communication.configuration.CommunicationAutoConfiguration`
-- `com.darpan.communication.configuration.email.MailAutoConfiguration`
-- `com.darpan.communication.configuration.message.MessagingAutoConfiguration`
-
-Ensure the imports file lists them one-per-line:
-`src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`
-
-If not using auto-config, include `com.darpan.communication` in your component scan.
-
 ## Configuration
 
 ### Email (default enabled)
@@ -101,32 +90,19 @@ smpp.connections.main-smsc.credentials.password=your-password
 
 Implementations:
 - Email: `service.impl.EmailServiceImpl`
-- SMS: `service.impl.TwilioMessageService`, `AwsSnsMessageService`, `MessageBirdService`, `SmppMessageService`
+- SMS: `TwilioMessageService`, `AwsSnsMessageService`, `MessageBirdService`, `SmppMessageService`
 
 ## Async
 - Enabled via `@EnableAsync` in `configuration.AsyncConfig`
 - Executor bean: `communicationTaskExecutor`
 - Async methods use `CompletableFuture.supplyAsync/runAsync`
 
-## Dependencies (highlights)
-- Spring Boot: web, mail
-- Twilio SDK 11.0.1
-- AWS SDK v2 (SNS + Apache HTTP client)
-- MessageBird API 3.2.0
-- Apache Camel (spring-boot, smpp, bean)
-- Lombok
-- iText 5.5.13.3 (present but not used in services)
 - In parent project add
   ```java
   @ComponentScan(basePackages = {"com.darpan.communication"})
 
 ## Troubleshooting
-- Ensure AutoConfiguration imports file is populated or component-scan base package is included
+- Ensure component-scan the base package is included
 - Verify `*.enabled=true` flags and credentials
 - Twilio initializes in `TwilioConfig` at startup; without creds it may fail if dependency is present
 - SMPP requires reachable SMSC and active Camel context
-
-## Known caveats
-- `EmailServiceImpl.sendEmail(...)` does not set a `from` address; mail server default is used
-- `MessageBirdService` reads kebab-case props via `@Value` (`api-key`, `sender-id`); use those names
-- `META-INF/spring/...AutoConfiguration.imports` exists but may be empty; populate with the three classes above
