@@ -1,4 +1,4 @@
-package com.darpan.communication.configuration.message;
+package com.communication.configuration.message;
 
 import com.twilio.Twilio;
 import jakarta.annotation.PostConstruct;

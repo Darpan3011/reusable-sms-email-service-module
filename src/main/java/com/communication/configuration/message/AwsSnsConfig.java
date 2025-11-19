@@ -1,4 +1,4 @@
-package com.darpan.communication.configuration.message;
+package com.communication.configuration.message;
 
 import lombok.Getter;
 import lombok.Setter;

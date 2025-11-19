@@ -1,4 +1,4 @@
-package com.darpan.communication.configuration.email;
+package com.communication.configuration.email;
 
 import lombok.Getter;
 import lombok.Setter;

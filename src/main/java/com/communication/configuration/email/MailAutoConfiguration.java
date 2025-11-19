@@ -1,4 +1,4 @@
-package com.darpan.communication.configuration.email;
+package com.communication.configuration.email;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

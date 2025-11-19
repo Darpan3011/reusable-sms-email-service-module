@@ -1,4 +1,4 @@
-package com.darpan.communication.service;
+package com.communication.service;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

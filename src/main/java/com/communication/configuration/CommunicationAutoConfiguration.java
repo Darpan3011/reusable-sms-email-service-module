@@ -1,9 +1,9 @@
-package com.darpan.communication.configuration;
+package com.communication.configuration;
 
-import com.darpan.communication.configuration.message.AwsSnsConfig;
-import com.darpan.communication.configuration.message.MessageBirdConfig;
-import com.darpan.communication.configuration.message.SmppConfig;
-import com.darpan.communication.configuration.message.TwilioConfig;
+import com.communication.configuration.message.AwsSnsConfig;
+import com.communication.configuration.message.MessageBirdConfig;
+import com.communication.configuration.message.SmppConfig;
+import com.communication.configuration.message.TwilioConfig;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 

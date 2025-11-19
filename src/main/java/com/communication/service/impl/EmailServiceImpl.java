@@ -1,6 +1,6 @@
-package com.darpan.communication.service.impl;
+package com.communication.service.impl;
 
-import com.darpan.communication.service.EmailService;
+import com.communication.service.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;

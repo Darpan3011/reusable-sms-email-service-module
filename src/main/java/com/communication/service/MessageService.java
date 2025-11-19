@@ -1,7 +1,7 @@
-package com.darpan.communication.service;
+package com.communication.service;
 
-import com.darpan.communication.model.SmsRequest;
-import com.darpan.communication.model.SmsResponse;
+import com.communication.model.SmsRequest;
+import com.communication.model.SmsResponse;
 
 import java.util.concurrent.CompletableFuture;
 

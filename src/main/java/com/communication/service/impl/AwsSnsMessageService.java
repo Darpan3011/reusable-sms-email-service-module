@@ -1,8 +1,8 @@
-package com.darpan.communication.service.impl;
+package com.communication.service.impl;
 
-import com.darpan.communication.model.SmsRequest;
-import com.darpan.communication.model.SmsResponse;
-import com.darpan.communication.service.MessageService;
+import com.communication.model.SmsRequest;
+import com.communication.model.SmsResponse;
+import com.communication.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;

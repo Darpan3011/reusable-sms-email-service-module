@@ -23,9 +23,9 @@ A reusable Spring Boot starter library for Email and SMS with async support and 
 
 ## Auto-configuration
 This module provides:
-- `com.darpan.communication.configuration.CommunicationAutoConfiguration`
-- `com.darpan.communication.configuration.email.MailAutoConfiguration`
-- `com.darpan.communication.configuration.message.MessagingAutoConfiguration`
+- `configuration.com.communication.CommunicationAutoConfiguration`
+- `email.configuration.com.communication.MailAutoConfiguration`
+- `message.configuration.com.communication.MessagingAutoConfiguration`
 
 Ensure the imports file lists them one-per-line:
 `src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`

@@ -1,8 +1,8 @@
-package com.darpan.communication.service.impl;
+package com.communication.service.impl;
 
-import com.darpan.communication.model.SmsRequest;
-import com.darpan.communication.model.SmsResponse;
-import com.darpan.communication.service.MessageService;
+import com.communication.model.SmsRequest;
+import com.communication.model.SmsResponse;
+import com.communication.service.MessageService;
 import com.twilio.rest.api.v2010.account.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

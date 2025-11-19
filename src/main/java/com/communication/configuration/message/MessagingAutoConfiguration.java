@@ -1,4 +1,4 @@
-package com.darpan.communication.configuration.message;
+package com.communication.configuration.message;
 
 import org.apache.camel.component.smpp.SmppConfiguration;
 import org.springframework.beans.factory.annotation.Qualifier;

@@ -1,4 +1,4 @@
-package com.darpan.communication.model;
+package com.communication.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
