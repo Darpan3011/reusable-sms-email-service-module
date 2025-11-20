@@ -1,6 +1,5 @@
 package com.communication.service.impl;
 
-import com.communication.configuration.email.MailSenderFactory;
 import com.communication.service.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -22,65 +21,50 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
-    private final MailSenderFactory mailSenderFactory;
+    private final JavaMailSender mailSender;
 
-    public EmailServiceImpl(MailSenderFactory mailSenderFactory) {
-        this.mailSenderFactory = mailSenderFactory;
+    public EmailServiceImpl(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
     }
 
     /**
      * Core reusable method for sending dynamic emails with optional attachments.
-     * Uses default provider.
      */
     @Override
     @Async("communicationTaskExecutor")
     public void sendEmail(String to, String subject, String body, String from, List<Resource> attachments) {
-        sendEmail(null, to, subject, body, from, attachments);
-    }
-
-    /**
-     * Provider-aware send: choose a provider by name (e.g. "gmail" or "outlook").
-     * If providerName is null or unknown, default provider will be used.
-     */
-    @Override
-    @Async("communicationTaskExecutor")
-    public void sendEmail(String providerName, String to, String subject, String body, String from, List<Resource> attachments) {
         try {
-            JavaMailSender mailSender = mailSenderFactory.getSender(providerName);
             MimeMessage message = mailSender.createMimeMessage();
+
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(body, true); // HTML enabled
 
-            if (from != null && !from.isBlank()) {
-                helper.setFrom(from);
-            } else {
-                return;
-            }
-
             if (attachments != null && !attachments.isEmpty()) {
                 for (Resource attachment : attachments) {
-                    if(attachment.getFilename()!=null) helper.addAttachment(attachment.getFilename(), attachment);
+                    helper.addAttachment(attachment.getFilename(), attachment);
                 }
             }
 
             mailSender.send(message);
 
         } catch (Exception e) {
-            log.error("Failed to send email (provider={}): {}", providerName, e.getMessage(), e);
             throw new RuntimeException("Failed to send email: " + e.getMessage(), e);
         }
     }
 
-    // existing helpers updated to call provider-aware async method with null provider (default)
+    // ----------------------------
+    // Helper Methods for Attachments
+    // ----------------------------
+
     public void sendEmailWithClasspathFiles(String to, String subject, String body, List<String> classpathFiles) {
         if (classpathFiles == null || classpathFiles.isEmpty()) {
             throw new IllegalArgumentException("No classpath files provided!");
         }
         List<Resource> resources = classpathFiles.stream().map(ClassPathResource::new).map(r -> (Resource) r).toList();
-        sendEmailAsync(null, to, subject, body, null, resources);
+        sendEmailAsync(to, subject, body, null, resources);
     }
 //
 //    public void sendEmailWithInputStream(String to, String subject, String body, ByteArrayInputStream stream, String fileName) {
@@ -100,24 +84,18 @@ public class EmailServiceImpl implements EmailService {
                 return multipartFile.getOriginalFilename();
             }
         };
-        sendEmailAsync(null, to, subject, body, null, List.of(resource));
+        sendEmailAsync(to, subject, body, null, List.of(resource));
     }
 
     public void sendEmailWithMultipleFiles(String to, String subject, String body, List<String> files) {
         List<Resource> resources = files.stream().map(FileSystemResource::new).map(r -> (Resource) r).toList();
-        sendEmailAsync(null, to, subject, body, null, resources);
+        sendEmailAsync(to, subject, body, null, resources);
     }
 
     @Override
     @Async("communicationTaskExecutor")
     public CompletableFuture<Void> sendEmailAsync(String to, String subject, String body, String from, List<Resource> attachments) {
-        return sendEmailAsync(null, to, subject, body, from, attachments);
-    }
-
-    @Override
-    @Async("communicationTaskExecutor")
-    public CompletableFuture<Void> sendEmailAsync(String providerName, String to, String subject, String body, String from, List<Resource> attachments) {
-        return CompletableFuture.runAsync(() -> sendEmail(providerName, to, subject, body, from, attachments));
+        return CompletableFuture.runAsync(() -> sendEmail(to, subject, body, from, attachments));
     }
 
     // ----------------------------

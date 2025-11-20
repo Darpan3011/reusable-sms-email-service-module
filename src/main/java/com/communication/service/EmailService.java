@@ -8,7 +8,6 @@ import java.util.concurrent.CompletableFuture;
 
 public interface EmailService {
 
-    // existing (backwards compatible)
     void sendEmail(String to, String subject, String body, String from, List<Resource> attachments);
 
     void sendEmailWithClasspathFiles(String to, String subject, String body, List<String> classpathFile);
@@ -20,10 +19,5 @@ public interface EmailService {
     void sendEmailWithMultipleFiles(String to, String subject, String body, List<String> files);
 
     CompletableFuture<Void> sendEmailAsync(String to, String subject, String body, String from, List<Resource> attachments);
-
-    // Provider-aware overloads (new) - providerName is the key used in configuration (e.g. "gmail", "outlook")
-    void sendEmail(String providerName, String to, String subject, String body, String from, List<Resource> attachments);
-
-    CompletableFuture<Void> sendEmailAsync(String providerName, String to, String subject, String body, String from, List<Resource> attachments);
 }
 
