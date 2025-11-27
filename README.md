@@ -40,6 +40,9 @@ messaging.mail.write-timeout=30000
 messaging.mail.protocol=smtp
 messaging.mail.default-encoding=UTF-8
 messaging.mail.debug=false
+# Additional JavaMail properties (passed directly to JavaMailSender)
+messaging.mail.additional-properties.mail.smtp.ssl.trust=*
+messaging.mail.additional-properties.mail.smtp.connectiontimeout=5000
 ```
 Note: If you define your own `JavaMailSender` bean, the starter backs off.
 
@@ -66,16 +69,11 @@ messaging.messagebird.api-key=your-api-key
 messaging.messagebird.sender-id=YourSenderID
 ```
 
-### SMPP (Apache Camel)
+### Azure Communication Services (SMS)
 ```properties
-messaging.smpp.enabled=true
-smpp.default-config.max-try=3
-smpp.default-config.rebind-time=5000
-smpp.default-config.system-type=SMPP
-smpp.connections.main-smsc.credentials.host=smpp-provider.com
-smpp.connections.main-smsc.credentials.port=2775
-smpp.connections.main-smsc.credentials.username=your-username
-smpp.connections.main-smsc.credentials.password=your-password
+messaging.microsoft.enabled=true
+azure.communication.connection-string=endpoint=https://<your-resource>.communication.azure.com/;accesskey=<your-access-key>
+azure.communication.sms.from-phone-number=+1234567890
 ```
 
 ## Services and Models
