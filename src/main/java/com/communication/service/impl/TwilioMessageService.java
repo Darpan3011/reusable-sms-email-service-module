@@ -42,16 +42,13 @@ public class TwilioMessageService implements MessageService {
 
         } catch (Exception e) {
             log.error("Twilio send failed: {}", e.getMessage());
-            return SmsResponse.builder()
-                    .success(false)
-                    .provider("Twilio")
-                    .error(e.getMessage())
-                    .build();
+            throw new RuntimeException("Twilio send failed: " + e.getMessage());
         }
     }
 
     @Override
     public CompletableFuture<SmsResponse> sendMessageAsync(SmsRequest request) {
+        request.setFrom(fromNumber);
         return CompletableFuture.supplyAsync(() -> sendMessage(request));
     }
 }

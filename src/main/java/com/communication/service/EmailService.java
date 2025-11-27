@@ -8,16 +8,18 @@ import java.util.concurrent.CompletableFuture;
 
 public interface EmailService {
 
-    void sendEmail(String to, String subject, String body, String from, List<Resource> attachments);
+    void sendEmail(String to, String subject, String body, String from, String title, List<Resource> attachments);
 
-    void sendEmailWithClasspathFiles(String to, String subject, String body, List<String> classpathFile);
+    void sendEmailWithClasspathFiles(String to, String subject, String body, String title, List<String> classpathFile);
 
 //    void sendEmailWithInputStream(String to, String subject, String body, ByteArrayInputStream stream, String fileName);
 
-    void sendEmailWithMultipartFile(String to, String subject, String body, MultipartFile multipartFile);
+    void sendEmailWithMultipartFile(String to, String subject, String body, String from, String title, MultipartFile multipartFile);
 
-    void sendEmailWithMultipleFiles(String to, String subject, String body, List<String> files);
+    void sendEmailWithMultipleFiles(String to, String subject, String body, String from, String title, List<String> files);
 
-    CompletableFuture<Void> sendEmailAsync(String to, String subject, String body, String from, List<Resource> attachments);
+    CompletableFuture<Void> sendEmailAsync(String to, String subject, String body, String from, String title, List<Resource> attachments);
+
+    void sendEmailWithMultipartFiles(String to, String subject, String body, String from, String title, List<MultipartFile> multipartFiles);
 }
 

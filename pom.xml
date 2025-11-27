@@ -18,9 +18,6 @@
 
     <properties>
         <java.version>17</java.version>
-
-        <camel-spring.version>4.6.0</camel-spring.version>
-
         <twilio.version>11.0.1</twilio.version>
         <aws-sdk.version>2.24.4</aws-sdk.version>
         <itext.version>5.5.13.3</itext.version>
@@ -28,13 +25,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.apache.camel.springboot</groupId>
-                <artifactId>camel-spring-boot-dependencies</artifactId>
-                <version>${camel-spring.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
             <dependency>
                 <groupId>software.amazon.awssdk</groupId>
                 <artifactId>bom</artifactId>
@@ -77,26 +67,17 @@
         </dependency>
 
         <dependency>
-            <groupId>com.messagebird</groupId>
-            <artifactId>messagebird-api</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-smpp-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.camel.springboot</groupId>
-            <artifactId>camel-bean-starter</artifactId>
-        </dependency>
-        <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>apache-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-communication-sms</artifactId>
+            <version>1.1.36</version>
         </dependency>
 
     </dependencies>

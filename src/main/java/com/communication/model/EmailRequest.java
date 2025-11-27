@@ -15,6 +15,7 @@ public class EmailRequest {
     private String to;
     private String subject;
     private String body;
+    private String title;
     private List<String> files;
 
     public EmailRequest(String to, String subject, String body) {

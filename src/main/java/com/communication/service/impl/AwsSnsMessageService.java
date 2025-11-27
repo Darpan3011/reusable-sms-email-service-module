@@ -41,11 +41,7 @@ public class AwsSnsMessageService implements MessageService {
 
         } catch (Exception e) {
             log.error("AWS SNS send failed: {}", e.getMessage(), e);
-            return SmsResponse.builder()
-                    .success(false)
-                    .provider("AWS_SNS")
-                    .error(e.getMessage())
-                    .build();
+            throw new RuntimeException("AWS SNS send failed: " + e.getMessage());
         }
     }
 
